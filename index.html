@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Test Sample Size Calculator</title>
+    <meta name="description"
+        content="Calculate the required sample size for your A/B testing experiments with statistical precision.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>A/B Test Sample Size Calculator</h1>
+            <p class="subtitle">Determine the sample size needed for your experiments with statistical confidence</p>
+        </header>
+
+        <div class="calculator-card">
+            <form id="calculatorForm" class="calculator-form">
+                <!-- Baseline Conversion Rate -->
+                <div class="form-group">
+                    <label for="bcr">
+                        <span class="label-text">Baseline Conversion Rate (BCR)</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="The percentage of users who currently complete your desired action (e.g., sign up, purchase, click). For example: If 100 visitors come to your site and 5 make a purchase, your BCR is 5%. If you're testing a new checkout flow and currently 3% of users complete checkout, enter 3%.">Current
+                            conversion rate of your control group</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="bcr" name="bcr" value="5" min="0.01" max="100" step="0.1" required>
+                        <span class="input-suffix">%</span>
+                    </div>
+                </div>
+
+                <!-- Minimum Detectable Effect -->
+                <div class="form-group">
+                    <label for="mde">
+                        <span class="label-text">Minimum Detectable Effect (MDE)</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="The smallest relative improvement you want to reliably detect. This is expressed as a percentage increase. For example: If your BCR is 5% and you want to detect a 20% improvement, your new rate would be 6% (5% × 1.20). Enter 20 for MDE. A 30% MDE on 10% BCR means detecting an increase from 10% to 13%.">Smallest
+                            change you want to detect (relative %)</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="mde" name="mde" value="30" min="0.1" max="1000" step="0.1" required>
+                        <span class="input-suffix">%</span>
+                    </div>
+                </div>
+
+                <!-- Statistical Significance (Alpha) -->
+                <div class="form-group">
+                    <label for="alpha">
+                        <span class="label-text">Significance Level (α)</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="The probability of concluding there's an effect when there isn't one (Type I error). 0.05 means 95% confidence - there's a 5% chance of a false positive. Lower values (0.01) give higher confidence but require larger sample sizes. Industry standard is 0.05.">Probability
+                            of false positive (typically 0.05)</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="alpha" name="alpha" value="0.05" min="0.001" max="0.5" step="0.001"
+                            required>
+                    </div>
+                </div>
+
+                <!-- Statistical Power -->
+                <div class="form-group">
+                    <label for="power">
+                        <span class="label-text">Statistical Power (1 - β)</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="The probability of detecting a real effect if it exists (1 minus Type II error rate). 0.8 means 80% chance of detecting the MDE if it's real. Higher values (0.9) reduce false negatives but require more users. Industry standard is 0.8 (80% power).">Probability
+                            of detecting a real effect (typically 0.8)</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="power" name="power" value="0.8" min="0.5" max="0.99" step="0.01"
+                            required>
+                    </div>
+                </div>
+
+                <!-- Test Type Toggle -->
+                <div class="form-group">
+                    <label for="testType">
+                        <span class="label-text">Test Type</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="Two-sided: Detects if conversion rate increases OR decreases (use when you want to catch any change). One-sided: Only detects if conversion rate increases (use when you only care about improvements). Two-sided is more conservative and recommended for most A/B tests.">Two-sided
+                            tests for any change, one-sided for specific direction</span>
+                    </label>
+                    <div class="toggle-wrapper">
+                        <button type="button" id="twoSidedBtn" class="toggle-btn active" data-value="true">
+                            Two-Sided
+                        </button>
+                        <button type="button" id="oneSidedBtn" class="toggle-btn" data-value="false">
+                            One-Sided
+                        </button>
+                    </div>
+                    <input type="hidden" id="testType" name="testType" value="true">
+                </div>
+
+                <!-- Traffic Split Ratio -->
+                <div class="form-group">
+                    <label for="splitRatio">
+                        <span class="label-text">Traffic Split Ratio</span>
+                        <span class="label-hint has-tooltip"
+                            data-tooltip="How you divide users between control and test groups. 0.5 (50/50) is most efficient. 0.7 means 70% see the test variant, 30% see control. Unequal splits require larger total sample sizes but can be useful when testing risky changes (use smaller % for test group).">Proportion
+                            of traffic to test group (0.5 = 50/50 split)</span>
+                    </label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="splitRatio" name="splitRatio" min="0.1" max="0.9" step="0.05"
+                            value="0.5">
+                        <div class="slider-labels">
+                            <span>10%</span>
+                            <span id="splitRatioValue" class="slider-value">50%</span>
+                            <span>90%</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            <div id="results" class="results">
+                <h2 class="results-title">Required Sample Size</h2>
+                <div class="results-grid">
+                    <div class="result-card primary">
+                        <div class="result-label">Total Sample Size</div>
+                        <div id="totalSampleSize" class="result-value">-</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">Control Group</div>
+                        <div id="controlSize" class="result-value">-</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">Test Group</div>
+                        <div id="testSize" class="result-value">-</div>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Built with ❤️ for better A/B testing • Open source and free to use</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
