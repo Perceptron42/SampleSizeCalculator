@@ -6,7 +6,9 @@ A beautiful, web-based calculator for determining the required sample size for A
 
 **[Try it now!](https://perceptron42.github.io/SampleSizeCalculator/)**
 
-<img src="screenshot.jpg" alt="A/B Testing Calculator Screenshot" width="300">
+<a href="https://perceptron42.github.io/SampleSizeCalculator/" target="_blank">
+  <img src="screenshot.jpg" alt="A/B Testing Calculator Screenshot" width="300">
+</a>
 
 ## Features
 
