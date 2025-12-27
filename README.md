@@ -2,6 +2,12 @@
 
 A beautiful, web-based calculator for determining the required sample size for A/B testing experiments. Built with pure HTML, CSS, and JavaScript - no backend required!
 
+## 🚀 Live Demo
+
+**[Try it now!](https://perceptron42.github.io/SampleSizeCalculator/)**
+
+<img src="screenshot.jpg" alt="A/B Testing Calculator Screenshot" width="300">
+
 ## Features
 
 - **Real-time Calculations**: Results update instantly as you type
